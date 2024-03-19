@@ -30,17 +30,26 @@ public class GUI extends JFrame {
         canvas = new Canvas[2][5];
         for(int col = 0; col<5; col++){
             panel[col] = new JPanel();
-            button[0][col] = new JButton();
             canvas[0][col] = new Canvas();
-            button[1][col] = new JButton();
+            button[0][col] = new JButton(new ImageIcon(canvasToImage(canvas[1][col])));
             canvas[1][col] = new Canvas();
-
+            button[1][col] = new JButton(new ImageIcon(canvasToImage(canvas[1][col])));
+            
             panel[col].setLayout(new GridLayout(2,1));
             panel[col].add(button[0][col]);
             panel[col].add(button[1][col]);
 
             toolbar.add(panel[col]);
         }
+
+        int x = button[0][0].getX();
+        int y = button[0][0].getY();
+        int width = button[0][0].getWidth();
+        int height = button[0][0].getHeight();
+        Color color = Color.RED;
+        Oval button00 = new Oval(x,y,width,height,color);
+        button00.draw(Graphics g);
+        
 
         panel[5] = new JPanel();
         String[] options = {"", "2 pt", "4 pt", "6 pt", "8 pt", "10 pt"};
@@ -78,5 +87,13 @@ public class GUI extends JFrame {
         add(toolbar, BorderLayout.NORTH);
         add(mainCanvas, BorderLayout.CENTER);
         setVisible(true);
+    }
+    private static Image canvasToImage(Canvas canvas) {
+        int width = canvas.getWidth();
+        int height = canvas.getHeight();
+        Image image = canvas.createImage(width, height);
+        Graphics g = image.getGraphics();
+        canvas.paint(g);
+        return image;
     }
 }
