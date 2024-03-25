@@ -101,11 +101,25 @@ public class GUI extends JFrame {
         button[0][0].addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 mainCanvas.setFill(true);
+                mainCanvas.setCurrentShape("oval");
             }
         });
         button[1][0].addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 mainCanvas.setFill(false);
+                mainCanvas.setCurrentShape("oval");
+            }
+        });
+        button[0][1].addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mainCanvas.setFill(true);
+                mainCanvas.setCurrentShape("rectangle");
+            }
+        });
+        button[0][1].addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mainCanvas.setFill(false);
+                mainCanvas.setCurrentShape("rectangle");
             }
         });
 
@@ -153,7 +167,7 @@ public class GUI extends JFrame {
             public void actionPerformed(ActionEvent e){
                 Color selectedColor = JColorChooser.showDialog(GUI.this, "Choose a Color", Color.RED);
                 button00.setColor(selectedColor);
-                color = selectedColor;
+                mainCanvas.setColor(selectedColor);
             }
         });
 
