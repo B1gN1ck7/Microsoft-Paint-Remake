@@ -6,7 +6,6 @@ import java.util.*;
 public class Canvas1 extends JPanel implements MouseListener, MouseMotionListener {
     private int startX, startY; 
     private int currentX, currentY; 
-    private int finalX, finalY;
     private Color drawColor = Color.RED;
     private boolean fill;
     private String currentShape = "";
@@ -60,8 +59,21 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
                     rectangle.draw(g);
                 }
             }
+        } else if (currentShape.equals("triangle")){
+            if(currentY > startY) {
+                int[] x = {startX, currentX, (startX+currentX)/2};
+                int[] y = {currentY, currentY, startY};
+                int numPoints = 3;
+                Triangle triangle = new Triangle(x, y, numPoints, drawColor, fill);
+                triangle.draw(g);
+            } else {
+                int[] x = {startX, currentX, (startX+currentX)/2};
+                int[] y = {startY, startY, currentY};
+                int numPoints = 3;
+                Triangle triangle = new Triangle(x, y, numPoints, drawColor, fill);
+                triangle.draw(g);
+            }
         }
-        
     }    
 
     @Override
@@ -87,11 +99,7 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     @Override
     public void mouseMoved(MouseEvent e) {}
     @Override
-    public void mouseReleased(MouseEvent e) {
-        finalX = e.getX();
-        finalY = e.getY();
-        repaint();
-    }
+    public void mouseReleased(MouseEvent e) {}
 
     public void setDrawColor(Color color) {
         this.drawColor = color;
