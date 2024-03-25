@@ -5,22 +5,29 @@ import javax.swing.event.*;
 
 public class GUI extends JFrame {
     public static void main(String[] args) {
-        new GUI("Paint");
+        new GUI();
     }
 
     private JToolBar toolbar;
     private JButton[][] button;
     private JPanel[] panel;
-    private JPanel[][] canvas;
     private JComboBox<String> fontsizeBox;
     private JButton undoButton;
-    private JButton redoButton;
-    private Canvas mainCanvas;
+    private JLabel undoError;
+    
+    protected int x;
+    protected int y;
+    protected int width;
+    protected int height;
+    protected Color color;
+    protected boolean fill;
+    private Canvas1 mainCanvas = new Canvas1();
 
-    public GUI(String title) {
+
+    public GUI() {
         int w = 1250;
         int h = 700;
-        setTitle(title);
+        setTitle("Paint");
         setSize(w, h);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -28,7 +35,6 @@ public class GUI extends JFrame {
 
         panel = new JPanel[7];
         button = new JButton[2][5];
-        canvas = new JPanel[2][5];
 
         for (int col = 0; col < 5; col++) {
             panel[col] = new JPanel();
@@ -92,6 +98,16 @@ public class GUI extends JFrame {
         resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
         button[1][4].setIcon(resizedIcon);
 
+        button[0][0].addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mainCanvas.setFill(true);
+            }
+        });
+        button[1][0].addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mainCanvas.setFill(false);
+            }
+        });
 
         // Add components to the toolbar
         panel[5] = new JPanel();
@@ -100,11 +116,11 @@ public class GUI extends JFrame {
 
         JPanel panelUndo = new JPanel();
         undoButton = new JButton("Undo");
-        redoButton = new JButton("Redo");
+        undoError = new JLabel();
 
         panelUndo.setLayout(new FlowLayout());
         panelUndo.add(undoButton);
-        panelUndo.add(redoButton);
+        panelUndo.add(undoError);
 
         panel[5].setLayout(new GridLayout(2, 1));
         panel[5].add(fontsizeBox);
@@ -114,12 +130,12 @@ public class GUI extends JFrame {
 
         panel[6] = new JPanel();
         JButton colorButton = new JButton();
-        int x = 50; 
-        int y = 0; 
-        int width = 25; 
-        int height = 25; 
-        Color color = Color.RED;
-        boolean fill = true;
+        x = 50; 
+        y = 0; 
+        width = 25; 
+        height = 25; 
+        color = Color.RED;
+        fill = true;
 
         Rectangle button00 = new Rectangle(x, y, width, height, color, fill);
 
@@ -137,18 +153,10 @@ public class GUI extends JFrame {
             public void actionPerformed(ActionEvent e){
                 Color selectedColor = JColorChooser.showDialog(GUI.this, "Choose a Color", Color.RED);
                 button00.setColor(selectedColor);
-
-                JPanel drawingPanel = new JPanel() {
-                    @Override
-                    protected void paintComponent(Graphics g) {
-                        super.paintComponent(g);
-                        button00.draw(g); 
-                    }
-                };
+                color = selectedColor;
             }
         });
 
-        
         JButton resetButton = new JButton("Reset");
         JButton saveButton = new JButton("Save");
 
@@ -157,12 +165,15 @@ public class GUI extends JFrame {
         panel[6].add(resetButton);
         panel[6].add(saveButton);
 
-
         toolbar.add(panel[6]);
 
         // Set layout and add components to the frame
         setLayout(new BorderLayout());
         add(toolbar, BorderLayout.NORTH);
+
+        add(mainCanvas, BorderLayout.CENTER);
+
         setVisible(true);
     }
+    public boolean getFill() {return fill;}
 }
