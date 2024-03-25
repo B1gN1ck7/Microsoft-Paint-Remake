@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.util.*;
 
 public class Canvas1 extends JPanel implements MouseListener, MouseMotionListener {
     private int startX, startY; 
@@ -9,6 +8,10 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     private Color drawColor = Color.RED;
     private boolean fill;
     private String currentShape = "";
+    private int printListNum = 0;
+    private int ovalNum = 0;
+    private int rectNum = 0;
+    private int triNum = 0;
 
     public Canvas1() {
         setPreferredSize(new Dimension(800, 600)); 
@@ -18,45 +21,41 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
         addMouseMotionListener(this);
     }
 
+    String[] printList = new String[50];
+    Oval oval[] = new Oval[10];
+    Rectangle rectangle[] = new Rectangle[10];
+    Triangle triangle[] = new Triangle[10];
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(drawColor); 
         if(currentShape.equals("")){}
         else if(currentShape.equals("oval")){
             if(currentX>startX){
                 if(currentY>startY) {
-                    Oval oval = new Oval(startX, startY, currentX - startX, currentY - startY, drawColor, fill);
-                    oval.draw(g);
+                    oval[ovalNum] = new Oval(startX, startY, currentX - startX, currentY - startY, drawColor, fill);
                 } else {
-                    Oval oval = new Oval(startX, currentY, currentX - startX, startY - currentY, drawColor, fill);
-                    oval.draw(g);
+                    oval[ovalNum] = new Oval(startX, currentY, currentX - startX, startY - currentY, drawColor, fill);
                 }
             } else {
                 if(currentY>startY) {
-                    Oval oval = new Oval(currentX, startY, startX - currentX, currentY - startY, drawColor, fill);
-                    oval.draw(g);
+                    oval[ovalNum] = new Oval(currentX, startY, startX - currentX, currentY - startY, drawColor, fill);
                 } else {
-                    Oval oval = new Oval(currentX, currentY, startX - currentX, startY - currentY, drawColor, fill);
-                    oval.draw(g);
+                    oval[ovalNum] = new Oval(currentX, currentY, startX - currentX, startY - currentY, drawColor, fill);
                 }
             }
         } else if (currentShape.equals("rectangle")) {
             if(currentX>startX){
                 if(currentY>startY) {
-                    Rectangle rectangle = new Rectangle(startX, startY, currentX - startX, currentY - startY, drawColor, fill);
-                    rectangle.draw(g);
+                    rectangle[rectNum] = new Rectangle(startX, startY, currentX - startX, currentY - startY, drawColor, fill);
                 } else {
-                    Rectangle rectangle = new Rectangle(startX, currentY, currentX - startX, startY - currentY, drawColor, fill);
-                    rectangle.draw(g);
+                    rectangle[rectNum] = new Rectangle(startX, currentY, currentX - startX, startY - currentY, drawColor, fill);
                 }
             } else {
                 if(currentY>startY) {
-                    Rectangle rectangle = new Rectangle(currentX, startY, startX - currentX, currentY - startY, drawColor, fill);
-                    rectangle.draw(g);
+                    rectangle[rectNum] = new Rectangle(currentX, startY, startX - currentX, currentY - startY, drawColor, fill);
                 } else {
-                    Rectangle rectangle = new Rectangle(currentX, currentY, startX - currentX, startY - currentY, drawColor, fill);
-                    rectangle.draw(g);
+                    rectangle[rectNum] = new Rectangle(currentX, currentY, startX - currentX, startY - currentY, drawColor, fill);
                 }
             }
         } else if (currentShape.equals("triangle")){
@@ -64,16 +63,15 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
                 int[] x = {startX, currentX, (startX+currentX)/2};
                 int[] y = {currentY, currentY, startY};
                 int numPoints = 3;
-                Triangle triangle = new Triangle(x, y, numPoints, drawColor, fill);
-                triangle.draw(g);
+                triangle[triNum] = new Triangle(x, y, numPoints, drawColor, fill);
             } else {
                 int[] x = {startX, currentX, (startX+currentX)/2};
                 int[] y = {startY, startY, currentY};
                 int numPoints = 3;
-                Triangle triangle = new Triangle(x, y, numPoints, drawColor, fill);
-                triangle.draw(g);
+                triangle[triNum] = new Triangle(x, y, numPoints, drawColor, fill);
             }
         }
+        calldraw(g);
     }    
 
     @Override
@@ -99,7 +97,13 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     @Override
     public void mouseMoved(MouseEvent e) {}
     @Override
-    public void mouseReleased(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {
+        if(currentShape.equals("oval")){ovalNum++; printList[printListNum] = "oval";}
+        else if(currentShape.equals("rectangle")){rectNum++; printList[printListNum] = "rectangle";}
+        else if(currentShape.equals("triangle")){triNum++; printList[printListNum] = "triangle";}
+
+        printListNum++;
+    }
 
     public void setDrawColor(Color color) {
         this.drawColor = color;
@@ -110,4 +114,25 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     public void setFill(boolean fill) {this.fill = fill;}
     public void setCurrentShape(String currentShape) {this.currentShape = currentShape;}
     public void setColor(Color drawColor) {this.drawColor = drawColor;}
+
+    
+    public void calldraw(Graphics g) {
+        int o = 0; // counter for ovals
+        int r = 0; // counter for rectangles
+        int t = 0; // counter for triangles
+    
+        for (int n = 0; n < printListNum+1; n++) { //n = the counter to go through all of the shapes in printList
+            if (printList[n].equals("oval")) {
+                oval[o].draw(g);
+                o++;
+            } else if (printList[n].equals("rectangle")) {
+                rectangle[r].draw(g);
+                r++;
+            } else if (printList[n].equals("triangle")) {
+                triangle[t].draw(g);
+                t++;
+            } 
+        }
+    }
 }
+    
