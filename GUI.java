@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
 
 public class GUI extends JFrame {
     public static void main(String[] args) {
@@ -116,14 +115,25 @@ public class GUI extends JFrame {
                 mainCanvas.setCurrentShape("rectangle");
             }
         });
-        button[0][1].addActionListener(new ActionListener() {
+        button[1][1].addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 mainCanvas.setFill(false);
                 mainCanvas.setCurrentShape("rectangle");
             }
         });
+        button[0][2].addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mainCanvas.setFill(true);
+                mainCanvas.setCurrentShape("triangle");
+            }
+        });
+        button[1][2].addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mainCanvas.setFill(false);
+                mainCanvas.setCurrentShape("triangle");
+            }
+        });
 
-        // Add components to the toolbar
         panel[5] = new JPanel();
         String[] options = {"", "2 pt", "4 pt", "6 pt", "8 pt", "10 pt"};
         fontsizeBox = new JComboBox<>(options);
@@ -181,7 +191,6 @@ public class GUI extends JFrame {
 
         toolbar.add(panel[6]);
 
-        // Set layout and add components to the frame
         setLayout(new BorderLayout());
         add(toolbar, BorderLayout.NORTH);
 
