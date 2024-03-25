@@ -1,17 +1,21 @@
-// Oval.java -- draws a circle
-
 import java.awt.*;
 
 public class Oval extends Shape {
 
-    public Oval(int x, int y, int width, int height, Color color) {
-        super(x, y, width, height, color);
+    public Oval(int x, int y, int width, int height, Color color, boolean fill) {
+        super(x, y, width, height, color, fill);
     }
 
+    // Override the draw method to perform drawing operations
     @Override
     public void draw(Graphics g) {
-        g.setColor(color);
-        g.fillOval(x,y,width,height);
+        if (fill) {
+            g.setColor(color);
+            g.fillOval(x, y, width, height);
+        } else {
+            g.setColor(color);
+            g.drawOval(x, y, width, height);
+        }
     }
-    
 }
+
