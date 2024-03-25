@@ -4,20 +4,17 @@ import javax.swing.*;
 import java.util.*;
 
 public class Canvas1 extends JPanel implements MouseListener, MouseMotionListener {
-    // Instance variables for drawing
-    private int startX, startY; // Initial mouse position
-    private int currentX, currentY; // Current mouse position
+    private int startX, startY; 
+    private int currentX, currentY; 
     private int finalX, finalY;
-    private Color drawColor = Color.RED; // Default drawing color
+    private Color drawColor = Color.RED;
     private boolean fill;
-    private String currentShape;
+    private String currentShape = "";
 
     public Canvas1() {
-        // Set up JPanel
-        setPreferredSize(new Dimension(800, 600)); // Set preferred size
-        setBackground(Color.WHITE); // Set background color
+        setPreferredSize(new Dimension(800, 600)); 
+        setBackground(Color.WHITE);
 
-        // Add mouse event listeners
         addMouseListener(this);
         addMouseMotionListener(this);
     }
@@ -26,12 +23,43 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(drawColor); 
-        if(currentShape.equals("oval")){
-            Oval oval = new Oval(startX, startY, currentX - startX, currentY - startY, drawColor, fill);
-            oval.draw(g);
+        if(currentShape.equals("")){}
+        else if(currentShape.equals("oval")){
+            if(currentX>startX){
+                if(currentY>startY) {
+                    Oval oval = new Oval(startX, startY, currentX - startX, currentY - startY, drawColor, fill);
+                    oval.draw(g);
+                } else {
+                    Oval oval = new Oval(startX, currentY, currentX - startX, startY - currentY, drawColor, fill);
+                    oval.draw(g);
+                }
+            } else {
+                if(currentY>startY) {
+                    Oval oval = new Oval(currentX, startY, startX - currentX, currentY - startY, drawColor, fill);
+                    oval.draw(g);
+                } else {
+                    Oval oval = new Oval(currentX, currentY, startX - currentX, startY - currentY, drawColor, fill);
+                    oval.draw(g);
+                }
+            }
         } else if (currentShape.equals("rectangle")) {
-            Rectangle rectangle = new Rectangle(startX, startY, currentX - startX, currentY - startY, drawColor, fill);
-            rectangle.draw(g);
+            if(currentX>startX){
+                if(currentY>startY) {
+                    Rectangle rectangle = new Rectangle(startX, startY, currentX - startX, currentY - startY, drawColor, fill);
+                    rectangle.draw(g);
+                } else {
+                    Rectangle rectangle = new Rectangle(startX, currentY, currentX - startX, startY - currentY, drawColor, fill);
+                    rectangle.draw(g);
+                }
+            } else {
+                if(currentY>startY) {
+                    Rectangle rectangle = new Rectangle(currentX, startY, startX - currentX, currentY - startY, drawColor, fill);
+                    rectangle.draw(g);
+                } else {
+                    Rectangle rectangle = new Rectangle(currentX, currentY, startX - currentX, startY - currentY, drawColor, fill);
+                    rectangle.draw(g);
+                }
+            }
         }
         
     }    
@@ -65,7 +93,6 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
         repaint();
     }
 
-    // Optional: Provide methods for setting drawing color, clearing canvas, etc.
     public void setDrawColor(Color color) {
         this.drawColor = color;
     }
@@ -75,6 +102,4 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     public void setFill(boolean fill) {this.fill = fill;}
     public void setCurrentShape(String currentShape) {this.currentShape = currentShape;}
     public void setColor(Color drawColor) {this.drawColor = drawColor;}
-
-
 }
