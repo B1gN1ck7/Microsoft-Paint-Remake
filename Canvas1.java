@@ -7,8 +7,10 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     // Instance variables for drawing
     private int startX, startY; // Initial mouse position
     private int currentX, currentY; // Current mouse position
-    private Color drawColor = Color.BLACK; // Default drawing color
+    private int finalX, finalY;
+    private Color drawColor = Color.RED; // Default drawing color
     private boolean fill;
+    private String currentShape;
 
     public Canvas1() {
         // Set up JPanel
@@ -24,8 +26,14 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(drawColor); 
-        Oval oval = new Oval(startX, startY, currentX - startX, currentY - startY, drawColor, fill);
-        oval.draw(g);
+        if(currentShape.equals("oval")){
+            Oval oval = new Oval(startX, startY, currentX - startX, currentY - startY, drawColor, fill);
+            oval.draw(g);
+        } else if (currentShape.equals("rectangle")) {
+            Rectangle rectangle = new Rectangle(startX, startY, currentX - startX, currentY - startY, drawColor, fill);
+            rectangle.draw(g);
+        }
+        
     }    
 
     @Override
@@ -51,13 +59,22 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     @Override
     public void mouseMoved(MouseEvent e) {}
     @Override
-    public void mouseReleased(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {
+        finalX = e.getX();
+        finalY = e.getY();
+        repaint();
+    }
 
     // Optional: Provide methods for setting drawing color, clearing canvas, etc.
     public void setDrawColor(Color color) {
         this.drawColor = color;
     }
-    public boolean getFill(){return fill;}
-    public void setFill(boolean fill){this.fill = fill;}
+    public boolean getFill() {return fill;}
+    public String getCurrentShape() {return currentShape;}
+    public Color getColor() {return drawColor;}
+    public void setFill(boolean fill) {this.fill = fill;}
+    public void setCurrentShape(String currentShape) {this.currentShape = currentShape;}
+    public void setColor(Color drawColor) {this.drawColor = drawColor;}
+
 
 }
