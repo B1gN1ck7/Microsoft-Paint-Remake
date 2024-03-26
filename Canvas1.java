@@ -1,212 +1,116 @@
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.*;
+import java.util.List;
 
-public class GUI extends JFrame {
-    public static void main(String[] args) {
-        new GUI();
+public class Canvas1 extends JPanel implements MouseListener, MouseMotionListener {
+    private int startX, startY; 
+    private int currentX, currentY; 
+    private Color drawColor = Color.RED;
+    private boolean fill;
+    private String currentShape = "";
+    private List<Shape> shapes = new ArrayList<>();
+
+    public Canvas1() {
+        setPreferredSize(new Dimension(800, 600)); 
+        setBackground(Color.WHITE);
+
+        addMouseListener(this);
+        addMouseMotionListener(this);
     }
 
-    private JToolBar toolbar;
-    private JButton[][] button;
-    private JPanel[] panel;
-    private JComboBox<String> fontsizeBox;
-    private JButton undoButton;
-    private JLabel undoError;
-    
-    protected int x;
-    protected int y;
-    protected int width;
-    protected int height;
-    protected Color color;
-    protected boolean fill;
-    private Canvas1 mainCanvas = new Canvas1();
-
-
-    public GUI() {
-        int w = 1250;
-        int h = 700;
-        setTitle("Paint");
-        setSize(w, h);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        toolbar = new JToolBar();
-
-        panel = new JPanel[7];
-        button = new JButton[2][5];
-
-        for (int col = 0; col < 5; col++) {
-            panel[col] = new JPanel();
-            button[0][col] = new JButton();
-            button[1][col] = new JButton();
-
-            panel[col].setLayout(new GridLayout(2, 1));
-            panel[col].add(button[0][col]);
-            panel[col].add(button[1][col]);
-
-            toolbar.add(panel[col]);
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.setColor(drawColor); 
+        for (Shape shape : shapes) {
+            shape.draw(g);
         }
+        g.setColor(drawColor);
+    if (currentShape.equals("oval")) {
+        int x = Math.min(startX, currentX);
+        int y = Math.min(startY, currentY);
+        int width = Math.abs(currentX - startX);
+        int height = Math.abs(currentY - startY);
+        Oval oval = new Oval(x, y, width, height, drawColor, fill);
+        oval.draw(g);
+    } else if (currentShape.equals("rectangle")) {
+        int x = Math.min(startX, currentX);
+        int y = Math.min(startY, currentY);
+        int width = Math.abs(currentX - startX);
+        int height = Math.abs(currentY - startY);
+        Rectangle rectangle = new Rectangle(x, y, width, height, drawColor, fill);
+        rectangle.draw(g);
+    } else if (currentShape.equals("triangle")) {
+        int[] x = {startX, currentX, (startX + currentX) / 2};
+        int[] y = {currentY, currentY, startY};
+        if (currentY <= startY) {
+            y = new int[] {startY, startY, currentY};
+        }
+        Triangle triangle = new Triangle(x, y, 3, drawColor, fill);
+        triangle.draw(g);
+    } 
+}
+
         
-        String imagePath = "filledCircle.png"; //add images to the buttons
-        ImageIcon icon = new ImageIcon(imagePath);
-        ImageIcon resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-        button[0][0].setIcon(resizedIcon);
 
-        imagePath = "drawCircle.png"; //add images to the buttons
-        icon = new ImageIcon(imagePath);
-        resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(60, 40, Image.SCALE_SMOOTH));
-        button[1][0].setIcon(resizedIcon);
-
-        imagePath = "filledSquare.png"; //add images to the buttons
-        icon = new ImageIcon(imagePath);
-        resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-        button[0][1].setIcon(resizedIcon);
-
-        imagePath = "drawSquare.png"; //add images to the buttons
-        icon = new ImageIcon(imagePath);
-        resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-        button[1][1].setIcon(resizedIcon);
-
-        imagePath = "filledTriangle.png"; //add images to the buttons
-        icon = new ImageIcon(imagePath);
-        resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-        button[0][2].setIcon(resizedIcon);
-
-        imagePath = "drawtriangle.jpg"; //add images to the buttons
-        icon = new ImageIcon(imagePath);
-        resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-        button[1][2].setIcon(resizedIcon);
-
-        imagePath = "line.jpg"; //add images to the buttons
-        icon = new ImageIcon(imagePath);
-        resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-        button[0][3].setIcon(resizedIcon);
-
-        imagePath = "dashedLine.png"; //add images to the buttons
-        icon = new ImageIcon(imagePath);
-        resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(80, 40, Image.SCALE_SMOOTH));
-        button[1][3].setIcon(resizedIcon);
-
-        imagePath = "pencil.jpg"; //add images to the buttons
-        icon = new ImageIcon(imagePath);
-        resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-        button[0][4].setIcon(resizedIcon);
-
-        imagePath = "eraser.jpg"; //add images to the buttons
-        icon = new ImageIcon(imagePath);
-        resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-        button[1][4].setIcon(resizedIcon);
-
-        button[0][0].addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                mainCanvas.setFill(true);
-                mainCanvas.setCurrentShape("oval");
-            }
-        });
-        button[1][0].addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                mainCanvas.setFill(false);
-                mainCanvas.setCurrentShape("oval");
-            }
-        });
-        button[0][1].addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                mainCanvas.setFill(true);
-                mainCanvas.setCurrentShape("rectangle");
-            }
-        });
-        button[1][1].addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                mainCanvas.setFill(false);
-                mainCanvas.setCurrentShape("rectangle");
-            }
-        });
-        button[0][2].addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                mainCanvas.setFill(true);
-                mainCanvas.setCurrentShape("triangle");
-            }
-        });
-        button[1][2].addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                mainCanvas.setFill(false);
-                mainCanvas.setCurrentShape("triangle");
-            }
-        });
-        button[0][4].addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                mainCanvas.setCurrentShape("pencil");
-            }
-        });
-
-        panel[5] = new JPanel();
-        String[] options = {"", "2 pt", "4 pt", "6 pt", "8 pt", "10 pt"};
-        fontsizeBox = new JComboBox<>(options);
-
-        JPanel panelUndo = new JPanel();
-        undoButton = new JButton("Undo");
-        undoError = new JLabel();
-
-        panelUndo.setLayout(new FlowLayout());
-        panelUndo.add(undoButton);
-        panelUndo.add(undoError);
-
-        panel[5].setLayout(new GridLayout(2, 1));
-        panel[5].add(fontsizeBox);
-        panel[5].add(panelUndo);
-
-        toolbar.add(panel[5]);
-
-        panel[6] = new JPanel();
-        JButton colorButton = new JButton();
-        x = 50; 
-        y = 0; 
-        width = 25; 
-        height = 25; 
-        color = Color.RED;
-        fill = true;
-
-        Rectangle button00 = new Rectangle(x, y, width, height, color, fill);
-
-        JPanel drawingPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                button00.draw(g); 
-            }
-        };
-        drawingPanel.setPreferredSize(new Dimension(25, 25));
-        colorButton.setLayout(new BorderLayout());
-        colorButton.add(drawingPanel, BorderLayout.CENTER);
-        colorButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                Color selectedColor = JColorChooser.showDialog(GUI.this, "Choose a Color", Color.RED);
-                button00.setColor(selectedColor);
-                mainCanvas.setColor(selectedColor);
-            }
-        });
-
-        JButton resetButton = new JButton();
-
-        imagePath = "reset.jpg"; //add images to the buttons
-        icon = new ImageIcon(imagePath);
-        resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-        resetButton.setIcon(resizedIcon);
-
-        JButton saveButton = new JButton("Save");
-
-        panel[6].setLayout(new GridLayout(3, 1));
-        panel[6].add(colorButton);
-        panel[6].add(resetButton);
-        panel[6].add(saveButton);
-
-        toolbar.add(panel[6]);
-
-        setLayout(new BorderLayout());
-        add(toolbar, BorderLayout.NORTH);
-
-        add(mainCanvas, BorderLayout.CENTER);
-
-        setVisible(true);
+    @Override
+    public void mousePressed(MouseEvent e) {
+        startX = e.getX();
+        startY = e.getY();
     }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        currentX = e.getX();
+        currentY = e.getY();
+        repaint(); 
+    }
+
+    public void mouseReleased(MouseEvent e) {
+        if (currentShape.equals("oval")) {
+            int x = Math.min(startX, currentX);
+            int y = Math.min(startY, currentY); 
+            int width = Math.abs(currentX - startX);
+            int height = Math.abs(currentY - startY);
+            
+            Oval oval = new Oval(x, y, width, height, drawColor, fill);
+            shapes.add(oval);
+        } else if (currentShape.equals("rectangle")) {
+            int x = Math.min(startX, currentX);
+            int y = Math.min(startY, currentY);
+            int width = Math.abs(currentX - startX);
+            int height = Math.abs(currentY - startY);
+            
+            Rectangle rectangle = new Rectangle(x, y, width, height, drawColor, fill);
+            shapes.add(rectangle);
+        } else if (currentShape.equals("triangle")) {
+            int[] x = {startX, currentX, (startX + currentX) / 2};
+            int[] y = {currentY, currentY, startY};
+            if (currentY <= startY) {
+                y = new int[] {startY, startY, currentY};
+            }
+            Triangle triangle = new Triangle(x, y, 3, drawColor, fill);
+            shapes.add(triangle);
+        } 
+        repaint(); 
+    }
+    @Override
+    public void mouseClicked(MouseEvent e) {}
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+    @Override
+    public void mouseExited(MouseEvent e) {}
+    @Override
+    public void mouseMoved(MouseEvent e) {}
+
+    public void setDrawColor(Color color) {this.drawColor = color;}
+    public boolean getFill() {return fill;}
+    public String getCurrentShape() {return currentShape;}
+    public Color getColor() {return drawColor;}
+    public void setFill(boolean fill) {this.fill = fill;}
+    public void setCurrentShape(String currentShape) {this.currentShape = currentShape;}
+    public void setColor(Color drawColor) {this.drawColor = drawColor;}
 }
