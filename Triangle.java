@@ -1,29 +1,25 @@
 import java.awt.*;
 
-public class Triangle implements TriangleInterface {
-    private int[] x;
-    private int[] y;
+public class Triangle extends Shape implements TriangleInterface {
+
+    private int[] xPoints;
+    private int[] yPoints;
     private int numPoints;
-    private Color color;
-    private boolean fill;
 
-    public Triangle(int[] x, int[] y, int numPoints, Color color, boolean fill) {
-        this.x = x;
-        this.y = y;
+    public Triangle(int[] xPoints, int[] yPoints, int numPoints, Color color, boolean fill) {
+        super(xPoints[0], yPoints[0], color, fill);
+        this.xPoints = xPoints;
+        this.yPoints = yPoints;
         this.numPoints = numPoints;
-        this.color = color;
-        this.fill = fill;
     }
-
 
     @Override
     public void draw(Graphics g) {
+        g.setColor(color);
         if (fill) {
-            g.setColor(color);
-            g.fillPolygon(x, y, numPoints);
+            g.fillPolygon(xPoints, yPoints, numPoints);
         } else {
-            g.setColor(color);
-            g.drawPolygon(x, y, numPoints);
+            g.drawPolygon(xPoints, yPoints, numPoints);
         }
     }
 }
