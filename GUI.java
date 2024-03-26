@@ -99,42 +99,49 @@ public class GUI extends JFrame {
 
         button[0][0].addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                resetUndoErrorLabel();
                 mainCanvas.setFill(true);
                 mainCanvas.setCurrentShape("oval");
             }
         });
         button[1][0].addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                resetUndoErrorLabel();
                 mainCanvas.setFill(false);
                 mainCanvas.setCurrentShape("oval");
             }
         });
         button[0][1].addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                resetUndoErrorLabel();
                 mainCanvas.setFill(true);
                 mainCanvas.setCurrentShape("rectangle");
             }
         });
         button[1][1].addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                resetUndoErrorLabel();
                 mainCanvas.setFill(false);
                 mainCanvas.setCurrentShape("rectangle");
             }
         });
         button[0][2].addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                resetUndoErrorLabel();
                 mainCanvas.setFill(true);
                 mainCanvas.setCurrentShape("triangle");
             }
         });
         button[1][2].addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                resetUndoErrorLabel();
                 mainCanvas.setFill(false);
                 mainCanvas.setCurrentShape("triangle");
             }
         });
         button[0][4].addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                resetUndoErrorLabel();
                 mainCanvas.setCurrentShape("pencil");
             }
         });
@@ -144,10 +151,29 @@ public class GUI extends JFrame {
         fontsizeBox = new JComboBox<>(options);
 
         JPanel panelUndo = new JPanel();
-        undoButton = new JButton("Undo");
-        undoError = new JLabel();
+        undoButton = new JButton();
 
-        panelUndo.setLayout(new FlowLayout());
+        imagePath = "undo.png"; //add images to the buttons
+        icon = new ImageIcon(imagePath);
+        resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        undoButton.setIcon(resizedIcon);
+
+        undoError = new JLabel();
+        undoError.setHorizontalAlignment(JLabel.CENTER);
+        undoButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                Drawing drawing = mainCanvas.getFirstDrawing();
+                if(drawing == null){
+                    try{
+                        throw new IndexOutOfBoundsException();
+                    } catch (IndexOutOfBoundsException n) { //n is used in place of e because e is already being used.
+                        undoError.setText("There is nothing to Undo!");
+                    }
+                } else {mainCanvas.undoPressed();}
+            }
+        });
+
+        panelUndo.setLayout(new GridLayout(2,1));
         panelUndo.add(undoButton);
         panelUndo.add(undoError);
 
@@ -209,4 +235,5 @@ public class GUI extends JFrame {
 
         setVisible(true);
     }
+    public void resetUndoErrorLabel() {undoError.setText("");}
 }
