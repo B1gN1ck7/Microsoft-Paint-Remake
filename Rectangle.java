@@ -4,8 +4,12 @@ import java.awt.*;
 
 public class Rectangle extends Shape {
 
+    private int width;
+    private int height;
     public Rectangle(int x, int y, int width, int height, Color color, boolean fill) {
-        super(x, y, width, height, color, fill);
+        super(x, y, color, fill);
+        this.width = width;
+        this.height = height;
     }
 
     @Override
