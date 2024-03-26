@@ -2,8 +2,6 @@ import java.awt.*;
 
 public abstract class Shape extends Drawing {
 
-    protected int width;
-    protected int height;
     protected boolean fill;
 
     public Shape(int x, int y, Color color, boolean fill) {
