@@ -47,52 +47,52 @@ public class GUI extends JFrame {
             toolbar.add(panel[col]);
         }
         
-        String imagePath = "src\\filledCircle.png"; //add images to the buttons
+        String imagePath = "filledCircle.png"; //add images to the buttons
         ImageIcon icon = new ImageIcon(imagePath);
         ImageIcon resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
         button[0][0].setIcon(resizedIcon);
 
-        imagePath = "src\\drawCircle.png"; //add images to the buttons
+        imagePath = "drawCircle.png"; //add images to the buttons
         icon = new ImageIcon(imagePath);
         resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(60, 40, Image.SCALE_SMOOTH));
         button[1][0].setIcon(resizedIcon);
 
-        imagePath = "src\\filledSquare.png"; //add images to the buttons
+        imagePath = "filledSquare.png"; //add images to the buttons
         icon = new ImageIcon(imagePath);
         resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
         button[0][1].setIcon(resizedIcon);
 
-        imagePath = "src\\drawSquare.png"; //add images to the buttons
+        imagePath = "drawSquare.png"; //add images to the buttons
         icon = new ImageIcon(imagePath);
         resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
         button[1][1].setIcon(resizedIcon);
 
-        imagePath = "src\\filledTriangle.png"; //add images to the buttons
+        imagePath = "filledTriangle.png"; //add images to the buttons
         icon = new ImageIcon(imagePath);
         resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
         button[0][2].setIcon(resizedIcon);
 
-        imagePath = "src\\drawtriangle.jpg"; //add images to the buttons
+        imagePath = "drawtriangle.jpg"; //add images to the buttons
         icon = new ImageIcon(imagePath);
         resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
         button[1][2].setIcon(resizedIcon);
 
-        imagePath = "src\\line.jpg"; //add images to the buttons
+        imagePath = "line.jpg"; //add images to the buttons
         icon = new ImageIcon(imagePath);
         resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
         button[0][3].setIcon(resizedIcon);
 
-        imagePath = "src\\dashedLine.png"; //add images to the buttons
+        imagePath = "dashedLine.png"; //add images to the buttons
         icon = new ImageIcon(imagePath);
         resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(80, 40, Image.SCALE_SMOOTH));
         button[1][3].setIcon(resizedIcon);
 
-        imagePath = "src\\pencil.jpg"; //add images to the buttons
+        imagePath = "pencil.jpg"; //add images to the buttons
         icon = new ImageIcon(imagePath);
         resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
         button[0][4].setIcon(resizedIcon);
 
-        imagePath = "src\\eraser.jpg"; //add images to the buttons
+        imagePath = "eraser.jpg"; //add images to the buttons
         icon = new ImageIcon(imagePath);
         resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
         button[1][4].setIcon(resizedIcon);
@@ -131,6 +131,11 @@ public class GUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 mainCanvas.setFill(false);
                 mainCanvas.setCurrentShape("triangle");
+            }
+        });
+        button[0][4].addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mainCanvas.setCurrentShape("pencil");
             }
         });
 
@@ -181,7 +186,13 @@ public class GUI extends JFrame {
             }
         });
 
-        JButton resetButton = new JButton("Reset");
+        JButton resetButton = new JButton();
+
+        imagePath = "reset.jpg"; //add images to the buttons
+        icon = new ImageIcon(imagePath);
+        resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+        resetButton.setIcon(resizedIcon);
+
         JButton saveButton = new JButton("Save");
 
         panel[6].setLayout(new GridLayout(3, 1));
@@ -198,5 +209,4 @@ public class GUI extends JFrame {
 
         setVisible(true);
     }
-    public boolean getFill() {return fill;}
 }
