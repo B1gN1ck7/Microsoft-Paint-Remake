@@ -94,8 +94,15 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
             Triangle triangle = new Triangle(x, y, 3, drawColor, fill);
             drawing.add(triangle);
         } 
+        currentShape = "";
         repaint(); 
     }
+
+    public void undoPressed() {
+        drawing.remove(drawing.size()-1);
+        repaint();
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {}
     @Override
@@ -109,7 +116,15 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     public boolean getFill() {return fill;}
     public String getCurrentShape() {return currentShape;}
     public Color getColor() {return drawColor;}
+    public Drawing getFirstDrawing() {
+        if (!drawing.isEmpty()) {
+            return drawing.get(0);
+        } else {
+            return null;
+        }
+    }
     public void setFill(boolean fill) {this.fill = fill;}
     public void setCurrentShape(String currentShape) {this.currentShape = currentShape;}
     public void setColor(Color drawColor) {this.drawColor = drawColor;}
+
 }
