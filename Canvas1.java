@@ -1,4 +1,5 @@
 
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -11,7 +12,7 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     private Color drawColor = Color.RED;
     private boolean fill;
     private String currentShape = "";
-    private List<Shape> shapes = new ArrayList<>();
+    private List<Drawing> drawing = new ArrayList<>();
 
     public Canvas1() {
         setPreferredSize(new Dimension(800, 600)); 
@@ -25,8 +26,8 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(drawColor); 
-        for (Shape shape : shapes) {
-            shape.draw(g);
+        for (Drawing drawing : drawing) {
+            drawing.draw(g);
         }
         g.setColor(drawColor);
     if (currentShape.equals("oval")) {
@@ -54,8 +55,6 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     } 
 }
 
-        
-
     @Override
     public void mousePressed(MouseEvent e) {
         startX = e.getX();
@@ -77,7 +76,7 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
             int height = Math.abs(currentY - startY);
             
             Oval oval = new Oval(x, y, width, height, drawColor, fill);
-            shapes.add(oval);
+            drawing.add(oval);
         } else if (currentShape.equals("rectangle")) {
             int x = Math.min(startX, currentX);
             int y = Math.min(startY, currentY);
@@ -85,7 +84,7 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
             int height = Math.abs(currentY - startY);
             
             Rectangle rectangle = new Rectangle(x, y, width, height, drawColor, fill);
-            shapes.add(rectangle);
+            drawing.add(rectangle);
         } else if (currentShape.equals("triangle")) {
             int[] x = {startX, currentX, (startX + currentX) / 2};
             int[] y = {currentY, currentY, startY};
@@ -93,7 +92,7 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
                 y = new int[] {startY, startY, currentY};
             }
             Triangle triangle = new Triangle(x, y, 3, drawColor, fill);
-            shapes.add(triangle);
+            drawing.add(triangle);
         } 
         repaint(); 
     }
