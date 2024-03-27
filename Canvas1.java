@@ -1,5 +1,3 @@
-
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -9,6 +7,7 @@ import java.util.List;
 public class Canvas1 extends JPanel implements MouseListener, MouseMotionListener {
     private int startX, startY; 
     private int currentX, currentY; 
+    private int fontsize;
     private Color drawColor = Color.RED;
     private boolean fill;
     private String currentShape = "";
@@ -26,34 +25,35 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(drawColor); 
-        for (Drawing drawing : drawing) {
-            drawing.draw(g);
+        for (int i = 0; i < drawing.size(); i++) {
+            Drawing currentDrawing = drawing.get(i);
+            currentDrawing.draw(g);
         }
         g.setColor(drawColor);
-    if (currentShape.equals("oval")) {
-        int x = Math.min(startX, currentX);
-        int y = Math.min(startY, currentY);
-        int width = Math.abs(currentX - startX);
-        int height = Math.abs(currentY - startY);
-        Oval oval = new Oval(x, y, width, height, drawColor, fill);
-        oval.draw(g);
-    } else if (currentShape.equals("rectangle")) {
-        int x = Math.min(startX, currentX);
-        int y = Math.min(startY, currentY);
-        int width = Math.abs(currentX - startX);
-        int height = Math.abs(currentY - startY);
-        Rectangle rectangle = new Rectangle(x, y, width, height, drawColor, fill);
-        rectangle.draw(g);
-    } else if (currentShape.equals("triangle")) {
-        int[] x = {startX, currentX, (startX + currentX) / 2};
-        int[] y = {currentY, currentY, startY};
-        if (currentY <= startY) {
-            y = new int[] {startY, startY, currentY};
-        }
-        Triangle triangle = new Triangle(x, y, 3, drawColor, fill);
-        triangle.draw(g);
-    } 
-}
+        if (currentShape.equals("oval")) {
+            int x = Math.min(startX, currentX);
+            int y = Math.min(startY, currentY);
+            int width = Math.abs(currentX - startX);
+            int height = Math.abs(currentY - startY);
+            Oval oval = new Oval(x, y, width, height, drawColor, fill);
+            oval.draw(g);
+        } else if (currentShape.equals("rectangle")) {
+            int x = Math.min(startX, currentX);
+            int y = Math.min(startY, currentY);
+            int width = Math.abs(currentX - startX);
+            int height = Math.abs(currentY - startY);
+            Rectangle rectangle = new Rectangle(x, y, width, height, drawColor, fill);
+            rectangle.draw(g);
+        } else if (currentShape.equals("triangle")) {
+            int[] x = {startX, currentX, (startX + currentX) / 2};
+            int[] y = {currentY, currentY, startY};
+            if (currentY <= startY) {
+                y = new int[] {startY, startY, currentY};
+            }
+            Triangle triangle = new Triangle(x, y, 3, drawColor, fill);
+            triangle.draw(g);
+        } 
+    }
 
     @Override
     public void mousePressed(MouseEvent e) {
@@ -94,12 +94,20 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
             Triangle triangle = new Triangle(x, y, 3, drawColor, fill);
             drawing.add(triangle);
         } 
-        currentShape = "";
         repaint(); 
     }
 
     public void undoPressed() {
+        currentShape = "";
         drawing.remove(drawing.size()-1);
+        repaint();
+    }
+
+    public void resetCanvas(){
+        currentShape = "";
+        for (int i = drawing.size()-1; i > -1; i--) {
+            drawing.remove(i);
+        }
         repaint();
     }
 
@@ -126,5 +134,6 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     public void setFill(boolean fill) {this.fill = fill;}
     public void setCurrentShape(String currentShape) {this.currentShape = currentShape;}
     public void setColor(Color drawColor) {this.drawColor = drawColor;}
+    public void setFontSize(int fontsize) {this.fontsize = fontsize;}
 
 }
