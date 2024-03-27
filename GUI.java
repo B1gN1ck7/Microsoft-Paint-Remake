@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import javax.swing.*;
 
 public class GUI extends JFrame {
@@ -231,7 +233,28 @@ public class GUI extends JFrame {
             }
         });
 
-        JButton saveButton = new JButton("Save");
+        JButton saveButton = new JButton();
+
+        imagePath = "save.jpeg"; //add images to the buttons
+        icon = new ImageIcon(imagePath);
+        resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+        saveButton.setIcon(resizedIcon);
+
+        saveButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                try {
+                    BufferedImage bimage = new BufferedImage(mainCanvas.getWidth(), mainCanvas.getHeight(), BufferedImage.TYPE_INT_RGB);            
+                    Graphics2D bGr = bimage.createGraphics();
+                    mainCanvas.paint(bGr);
+                    javax.imageio.ImageIO.write(bimage, "png", new File("test.png"));
+                    bGr.dispose();
+                    undoError.setText("File saved");
+                } 
+                catch (Exception ex) {
+                    undoError.setText("Error saving file");
+                }
+            }
+        });
 
         panel[6].setLayout(new GridLayout(3, 1));
         panel[6].add(colorButton);
