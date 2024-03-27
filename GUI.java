@@ -149,6 +149,12 @@ public class GUI extends JFrame {
         panel[5] = new JPanel();
         String[] options = {"", "2 pt", "4 pt", "6 pt", "8 pt", "10 pt"};
         fontsizeBox = new JComboBox<>(options);
+        fontsizeBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int fontsize = Integer.parseInt(fontsizeBox.getSelectedItem().toString());
+                mainCanvas.setFontSize(fontsize);
+            }
+        });
 
         JPanel panelUndo = new JPanel();
         undoButton = new JButton();
@@ -218,6 +224,12 @@ public class GUI extends JFrame {
         icon = new ImageIcon(imagePath);
         resizedIcon = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH));
         resetButton.setIcon(resizedIcon);
+
+        resetButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                mainCanvas.resetCanvas();
+            }
+        });
 
         JButton saveButton = new JButton("Save");
 
