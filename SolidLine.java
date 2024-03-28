@@ -3,8 +3,8 @@ import java.awt.*;
 public class SolidLine extends Line{
 
 
-    public SolidLine(int X, int Y, int currentX, int currentY, Color color){
-        super(X,Y,color);
+    public SolidLine(int X, int Y, int currentX, int currentY, int font, Color color){
+        super(X,Y,color,font);
         this.currentX = currentX;
         this.currentY = currentY;
     }
@@ -12,8 +12,8 @@ public class SolidLine extends Line{
     public void draw(Graphics g) {
         
             g.setColor(color);
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.setStroke(new BasicStroke(5));
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.setStroke(new BasicStroke(font));
            g2d.drawLine(x, y, currentX, currentY);
     }
 }
