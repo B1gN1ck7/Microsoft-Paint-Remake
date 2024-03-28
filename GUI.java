@@ -161,11 +161,15 @@ public class GUI extends JFrame {
         });
 
         panel[5] = new JPanel();
-        String[] options = {"", "2 pt", "4 pt", "6 pt", "8 pt", "10 pt"};
+        String[] options = {"Select line size", "2", "4", "6", "8", "10"};
         fontsizeBox = new JComboBox<>(options);
         fontsizeBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int fontsize = Integer.parseInt(fontsizeBox.getSelectedItem().toString());
+                int fontsize;
+                if(fontsizeBox.getSelectedItem().toString().equals("Select line size")){
+                    fontsize = 1;
+                } else{
+                fontsize = Integer.parseInt(fontsizeBox.getSelectedItem().toString());}
                 mainCanvas.setFontSize(fontsize);
             }
         });
@@ -254,17 +258,31 @@ public class GUI extends JFrame {
 
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                try {
-                    BufferedImage bimage = new BufferedImage(mainCanvas.getWidth(), mainCanvas.getHeight(), BufferedImage.TYPE_INT_RGB);            
-                    Graphics2D bGr = bimage.createGraphics();
-                    mainCanvas.paint(bGr);
-                    javax.imageio.ImageIO.write(bimage, "png", new File("test.png"));
-                    bGr.dispose();
-                    undoError.setText("File saved");
-                } 
-                catch (Exception ex) {
-                    undoError.setText("Error saving file");
-                }
+                    JFrame fileNameAsk = new JFrame();
+                    JTextField name = new JTextField(10);
+                    JLabel prompt = new JLabel("Enter the file name you want");
+                    JButton saveReal = new JButton("Save");
+                    fileNameAsk.setLayout(new FlowLayout());
+                    fileNameAsk.setBounds(200,200,200,200);
+                    fileNameAsk.add(name);
+                    fileNameAsk.add(prompt);
+                    fileNameAsk.add(saveReal);
+                    saveReal.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e){
+                        try {
+                            BufferedImage bimage = new BufferedImage(mainCanvas.getWidth(), mainCanvas.getHeight(), BufferedImage.TYPE_INT_RGB);            
+                            Graphics2D bGr = bimage.createGraphics();
+                            mainCanvas.paint(bGr);
+                            javax.imageio.ImageIO.write(bimage, "png", new File(name.getText() + ".png"));
+                            bGr.dispose();
+                            undoError.setText("File saved");
+                            fileNameAsk.dispose();
+                        } 
+                        catch (Exception ex) {
+                            undoError.setText("Error saving file");
+                        }
+            }});
+                    fileNameAsk.setVisible(true);
             }
         });
 
