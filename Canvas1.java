@@ -55,12 +55,12 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
         } else if(currentShape.equals("SolidLine")){
             int X = (startX);
             int Y = (startY);
-            SolidLine solid = new SolidLine(X,Y,currentX, currentY, drawColor);
+            SolidLine solid = new SolidLine(X,Y,currentX, currentY, fontsize, drawColor);
             solid.draw(g);
         } else if(currentShape.equals("DashedLine")){
             int X = (startX);
             int Y = (startY);
-            DashedLine dashed = new DashedLine(X,Y,currentX, currentY, drawColor);
+            DashedLine dashed = new DashedLine(X,Y,currentX, currentY, fontsize, drawColor);
             dashed.draw(g);
         }
 
@@ -106,10 +106,10 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
             Triangle triangle = new Triangle(x, y, 3, drawColor, fill);
             drawing.add(triangle);
         }else if(currentShape.equals("SolidLine")){
-            SolidLine solid = new SolidLine(startX, startY, currentX, currentY, drawColor);
+            SolidLine solid = new SolidLine(startX, startY, currentX, currentY, fontsize, drawColor);
             drawing.add(solid);
         } else if(currentShape.equals("DashedLine")){
-            DashedLine dashed = new DashedLine(startX, startY, currentX, currentY, drawColor);
+            DashedLine dashed = new DashedLine(startX, startY, currentX, currentY, fontsize,  drawColor);
             drawing.add(dashed);
         } 
         repaint(); 
