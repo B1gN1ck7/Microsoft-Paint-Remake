@@ -156,9 +156,10 @@ public class GUI extends JFrame {
         button[0][4].addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 resetUndoErrorLabel();
-                mainCanvas.setCurrentShape("pencil");
+                mainCanvas.setCurrentShape("Pencil");
             }
         });
+        
 
         panel[5] = new JPanel();
         String[] options = {"Select line size", "2", "4", "6", "8", "10"};
