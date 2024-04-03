@@ -8,14 +8,13 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     private int startX, startY; 
     private int currentX, currentY; 
     private int fontsize;
-    private int pencilNum;
     private Color drawColor = Color.RED;
     private boolean fill;
+    private boolean dragging;
     private String currentShape = "";
     private ArrayList<ArrayList<Point>> pencilLines = new ArrayList<>();
     private ArrayList<Point> currentLine = new ArrayList<>();
     private List<Drawing> drawing = new ArrayList<>();
-    private ArrayList<Point> addLine;
     private ArrayList<Point> nullLine = new ArrayList<>();
 
     public Canvas1() {
@@ -66,8 +65,9 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
         }else if(currentShape.equals("Pencil")){
             Pencil pencil = new Pencil(currentLine, pencilLines, fontsize, drawColor);
             pencil.draw(g);
-            addLine = new ArrayList<>(currentLine);
-            pencilLines.add(addLine);
+        }else if(currentShape.equals("Eraser")){
+            Pencil pencil = new Pencil(currentLine, pencilLines, fontsize, Color.WHITE);
+            pencil.draw(g);
         }
 
         
@@ -77,20 +77,33 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     public void mousePressed(MouseEvent e) {
         startX = e.getX();
         startY = e.getY();
+        dragging = false;
+        if(currentShape.equals("Pencil")){
+            currentLine = new ArrayList<>();
+            currentLine.add(e.getPoint());
+            pencilLines.add(currentLine);}
+        else if(currentShape.equals("Eraser")){
+            currentLine = new ArrayList<>();
+            currentLine.add(e.getPoint());
+            pencilLines.add(currentLine);}
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
         currentX = e.getX();
         currentY = e.getY();
+        dragging = true;
         if(currentShape.equals("Pencil")){
+            currentLine.add(e.getPoint());}
+        else if(currentShape.equals("Eraser")){
             currentLine.add(e.getPoint());}
         repaint(); 
        
     }
 
     public void mouseReleased(MouseEvent e) {
-        if (currentShape.equals("oval")) {
+        if(!dragging){}
+        else if (currentShape.equals("oval")) {
             int x = Math.min(startX, currentX);
             int y = Math.min(startY, currentY); 
             int width = Math.abs(currentX - startX);
@@ -122,15 +135,18 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
             drawing.add(dashed);
         } else if(currentShape.equals("Pencil")){
             Pencil pencil = new Pencil(currentLine, pencilLines, fontsize, drawColor);
-            currentLine.clear();
+            drawing.add(pencil);
+        }  else if(currentShape.equals("Eraser")){
+            Pencil pencil = new Pencil(currentLine, pencilLines, fontsize, Color.WHITE);
             drawing.add(pencil);
         } 
-        repaint(); 
+        
+        if(dragging){repaint();}
     }
 
     public void undoPressed() {
         if(drawing.get(drawing.size()-1) instanceof Pencil)
-        {pencilLines.set(pencilLines.size()-1,nullLine);}
+        {pencilLines.get(pencilLines.size()-1).clear();}
         currentShape = "";
         drawing.remove(drawing.size()-1);
         repaint();
@@ -146,7 +162,49 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {}
+    public void mouseClicked(MouseEvent e) {
+        currentX = e.getX();
+        currentY = e.getY();
+        
+        if (currentShape.equals("oval")) {
+            int x = currentX;
+            int y = currentY;
+            int width = Math.abs(100);
+            int height = Math.abs(100);
+            
+            Oval oval = new Oval(x, y, width, height, drawColor, fill);
+            drawing.add(oval);
+        } else if (currentShape.equals("rectangle")) {
+            int x = Math.min(startX, currentX);
+            int y = Math.min(startY, currentY);
+            int width = Math.abs(currentX - startX);
+            int height = Math.abs(currentY - startY);
+            
+            Rectangle rectangle = new Rectangle(x, y, width, height, drawColor, fill);
+            drawing.add(rectangle);
+        } else if (currentShape.equals("triangle")) {
+            int[] x = {startX, currentX, (startX + currentX) / 2};
+            int[] y = {currentY, currentY, startY};
+            if (currentY <= startY) {
+                y = new int[] {startY, startY, currentY};
+            }
+            Triangle triangle = new Triangle(x, y, 3, drawColor, fill);
+            drawing.add(triangle);
+        }else if(currentShape.equals("SolidLine")){
+            SolidLine solid = new SolidLine(startX, startY, currentX, currentY, fontsize, drawColor);
+            drawing.add(solid);
+        } else if(currentShape.equals("DashedLine")){
+            DashedLine dashed = new DashedLine(startX, startY, currentX, currentY, fontsize,  drawColor);
+            drawing.add(dashed);
+        } else if(currentShape.equals("Pencil")){
+            Pencil pencil = new Pencil(currentLine, pencilLines, fontsize, drawColor);
+            drawing.add(pencil);
+        }  else if(currentShape.equals("Eraser")){
+            Pencil pencil = new Pencil(currentLine, pencilLines, fontsize, Color.WHITE);
+            drawing.add(pencil);
+        } 
+        repaint(); 
+    }
     @Override
     public void mouseEntered(MouseEvent e) {}
     @Override
