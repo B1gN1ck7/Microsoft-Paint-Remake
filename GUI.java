@@ -159,6 +159,12 @@ public class GUI extends JFrame {
                 mainCanvas.setCurrentShape("Pencil");
             }
         });
+        button[1][4].addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                resetUndoErrorLabel();
+                mainCanvas.setCurrentShape("Eraser");
+            }
+        });
         
 
         panel[5] = new JPanel();
