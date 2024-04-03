@@ -76,43 +76,43 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(drawColor); 
-        for (int i = 0; i < drawing.size(); i++) {
+        for (int i = 0; i < drawing.size(); i++) {  //redraws the previous drawings on the canvas 
             Drawing currentDrawing = drawing.get(i);
             currentDrawing.draw(g);
         }
         g.setColor(drawColor);
-        if (currentShape.equals("oval")) {
-            int x = Math.min(startX, currentX);
+        if (currentShape.equals("oval")) { //paints ovals
+            int x = Math.min(startX, currentX); //top corner coordinates
             int y = Math.min(startY, currentY);
-            int width = Math.abs(currentX - startX);
+            int width = Math.abs(currentX - startX); //width and height od the drawing 
             int height = Math.abs(currentY - startY);
-            Oval oval = new Oval(x, y, width, height, drawColor, fill);
-            oval.draw(g);
-        } else if (currentShape.equals("rectangle")) {
+            Oval oval = new Oval(x, y, width, height, drawColor, fill); // create oval
+            oval.draw(g); //draw oval. Same format for rectangle 
+        } else if (currentShape.equals("rectangle")) { //paints rectangles
             int x = Math.min(startX, currentX);
             int y = Math.min(startY, currentY);
             int width = Math.abs(currentX - startX);
             int height = Math.abs(currentY - startY);
             Rectangle rectangle = new Rectangle(x, y, width, height, drawColor, fill);
             rectangle.draw(g);
-        } else if (currentShape.equals("triangle")) {
-            int[] x = {startX, currentX, (startX + currentX) / 2};
-            int[] y = {currentY, currentY, startY};
+        } else if (currentShape.equals("triangle")) { //paints triangles
+            int[] x = {startX, currentX, (startX + currentX) / 2}; //finds the 3 points for the x coordinates of the triangle
+            int[] y = {currentY, currentY, startY}; //sets the y coordinates and looks to find if the currentY is smaller than the startY and fixes it if it is.
             if (currentY <= startY) {
                 y = new int[] {startY, startY, currentY};
             }
             Triangle triangle = new Triangle(x, y, 3, drawColor, fill);
             triangle.draw(g);
-        } else if(currentShape.equals("SolidLine")){
+        } else if(currentShape.equals("SolidLine")){ //paints solid lines
             SolidLine solid = new SolidLine(startX,startY,currentX, currentY, fontsize, drawColor);
             solid.draw(g);
-        } else if(currentShape.equals("DashedLine")){
+        } else if(currentShape.equals("DashedLine")){ //paints dashed lines
             DashedLine dashed = new DashedLine(startX,startY,currentX, currentY, fontsize, drawColor);
             dashed.draw(g);
-        }else if(currentShape.equals("Pencil")){
+        }else if(currentShape.equals("Pencil")){ //draws pencil
             Pencil pencil = new Pencil(currentLine, pencilLines, fontsize, drawColor);
             pencil.draw(g);
-        }else if(currentShape.equals("Eraser")){
+        }else if(currentShape.equals("Eraser")){ //erases 
             Pencil pencil = new Pencil(currentLine, pencilLines, fontsize, Color.WHITE);
             pencil.draw(g);
         }
@@ -128,7 +128,7 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     public void mousePressed(MouseEvent e) {
         startX = e.getX();
         startY = e.getY();
-        dragging = false;
+        dragging = false; //set dragging to false
         if(currentShape.equals("Pencil")){
             currentLine = new ArrayList<>();
             currentLine.add(e.getPoint());
@@ -146,7 +146,7 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
     public void mouseDragged(MouseEvent e) {
         currentX = e.getX();
         currentY = e.getY();
-        dragging = true;
+        dragging = true; //set dragging to true
         if(currentShape.equals("Pencil")){
             currentLine.add(e.getPoint());}
         else if(currentShape.equals("Eraser")){
@@ -161,7 +161,7 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
      */
     public void mouseReleased(MouseEvent e) {
         if(!dragging){}
-        else if (currentShape.equals("oval")) {
+        else if (currentShape.equals("oval")) { //creates an oval in drawing. Same functions as in the mouse dragged above for all functions
             int x = Math.min(startX, currentX);
             int y = Math.min(startY, currentY); 
             int width = Math.abs(currentX - startX);
@@ -169,7 +169,7 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
             
             Oval oval = new Oval(x, y, width, height, drawColor, fill);
             drawing.add(oval);
-        } else if (currentShape.equals("rectangle")) {
+        } else if (currentShape.equals("rectangle")) { //creates a rectangle in drawing
             int x = Math.min(startX, currentX);
             int y = Math.min(startY, currentY);
             int width = Math.abs(currentX - startX);
@@ -177,7 +177,7 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
             
             Rectangle rectangle = new Rectangle(x, y, width, height, drawColor, fill);
             drawing.add(rectangle);
-        } else if (currentShape.equals("triangle")) {
+        } else if (currentShape.equals("triangle")) { //creates a triangle
             int[] x = {startX, currentX, (startX + currentX) / 2};
             int[] y = {currentY, currentY, startY};
             if (currentY <= startY) {
@@ -185,16 +185,16 @@ public class Canvas1 extends JPanel implements MouseListener, MouseMotionListene
             }
             Triangle triangle = new Triangle(x, y, 3, drawColor, fill);
             drawing.add(triangle);
-        }else if(currentShape.equals("SolidLine")){
+        }else if(currentShape.equals("SolidLine")){ //creates a solid line 
             SolidLine solid = new SolidLine(startX, startY, currentX, currentY, fontsize, drawColor);
             drawing.add(solid);
-        } else if(currentShape.equals("DashedLine")){
+        } else if(currentShape.equals("DashedLine")){ //creates a dashedline 
             DashedLine dashed = new DashedLine(startX, startY, currentX, currentY, fontsize,  drawColor);
             drawing.add(dashed);
-        } else if(currentShape.equals("Pencil")){
+        } else if(currentShape.equals("Pencil")){  //creates a pencil drawing 
             Pencil pencil = new Pencil(currentLine, pencilLines, fontsize, drawColor);
             drawing.add(pencil);
-        }  else if(currentShape.equals("Eraser")){
+        }  else if(currentShape.equals("Eraser")){ //creates an eraser instance. 
             Pencil pencil = new Pencil(currentLine, pencilLines, fontsize, Color.WHITE);
             drawing.add(pencil);
         } 
